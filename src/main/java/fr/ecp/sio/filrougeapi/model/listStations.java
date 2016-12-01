@@ -1,55 +1,44 @@
 package fr.ecp.sio.filrougeapi.model;
 
+import java.util.List;
+
 /**
- * A POJO to represent a station.
+ * A POJO to represent a listStations.
  */
-public class Station {
+public class listStations {
 
-    private long id;
-    private Location location;
-    private String name;
+    private List<Station> stations;
 
-    private int availableBikes;
-    private int availableBikeStands;
+    private int totAvailableBikes = 0;
+    private int totAvailableBikeStands =0;
 
-    public long getId() {
-        return id;
+    public listStations(List<Station> stations) {
+        this.stations=stations;
+        this.totAvailableBikes=getTotAvailableBikes();
+        this.totAvailableBikeStands=getTotAvailableBikeStands();
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setStations(List<Station> stations) {
+        this.stations =stations;
+    }
+    public List<Station> getStations() {
+        return this.stations;
     }
 
-    public Location getLocation() {
-        return location;
+    public int getTotAvailableBikeStands() {
+
+        for (Station station : this.stations) {
+            this.totAvailableBikeStands = this.totAvailableBikeStands + station.getAvailableBikeStands();
+        }
+        return this.totAvailableBikeStands;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
-    }
+    public int getTotAvailableBikes() {
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getAvailableBikes() {
-        return availableBikes;
-    }
-
-    public void setAvailableBikes(int availableBikes) {
-        this.availableBikes = availableBikes;
-    }
-
-    public int getAvailableBikeStands() {
-        return availableBikeStands;
-    }
-
-    public void setAvailableBikeStands(int availableBikeStands) {
-        this.availableBikeStands = availableBikeStands;
+        for (Station station : this.stations) {
+            this.totAvailableBikes = this.totAvailableBikes + station.getAvailableBikes();
+        }
+        return this.totAvailableBikes;
     }
 
 }

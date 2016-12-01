@@ -1,6 +1,7 @@
 package fr.ecp.sio.filrougeapi.data;
 
 import fr.ecp.sio.filrougeapi.model.Station;
+import fr.ecp.sio.filrougeapi.model.User;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,8 +20,18 @@ public interface DataRepository {
 
     /*
         Get a list of all stations.
-        TODO: Add optional parameters to filter the list (or create other methods)
+        Added parameters: search, limit, offset
      */
-    List<Station> getStations() throws IOException;
+    List<Station> getStations(String search,int limit,int offset) throws IOException;
+
+    /*
+            Get a user by id.
+            Returns null if the user is not found.
+         */
+    User getUser(long id) throws IOException;
+    /*
+            Get a list of all users.
+         */
+    List<User> getUsers() throws IOException;
 
 }

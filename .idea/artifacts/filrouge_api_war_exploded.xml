@@ -8,7 +8,7 @@
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.7" />
-          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:6.0.4" />
+          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.35" />
         </element>
       </element>
       <element id="directory" name="META-INF">

@@ -18,6 +18,7 @@ public class DataUtils {
         // Singleton: create the instance if needed.
         if (sRepository == null) {
             sRepository = new SQLDataRepository();
+           // sRepository = new DummyDataRepository();
         }
         return sRepository;
     }

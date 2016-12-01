@@ -27,6 +27,15 @@
         <url-pattern>/stations</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-class>fr.ecp.sio.filrougeapi.endpoints.AuthServlet</servlet-class>
+        <servlet-name>auth</servlet-name>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>auth</servlet-name>
+        <url-pattern>/auth/token</url-pattern>
+    </servlet-mapping>
+
     <!-- You can also declare "filters" that will perform checks or modify requests/responses before or after the matching servlet is used. -->
     <!-- Filters are a good place to bring implement features shared across multiple endpoints. -->
     <filter>

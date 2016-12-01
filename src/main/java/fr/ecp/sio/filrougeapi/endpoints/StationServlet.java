@@ -40,6 +40,8 @@ public class StationServlet extends ApiServlet {
         }
 
         // Use our base class to send the station object serialized in JSON.
+        resp.setContentType("application/json");
+        // Use our base class to send the station object serialized in JSON.
         sendResponse(station, resp);
 
     }
