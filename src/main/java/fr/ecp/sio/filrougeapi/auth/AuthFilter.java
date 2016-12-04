@@ -35,12 +35,15 @@ public class AuthFilter implements Filter {
             boolean existkey=false;
 
             DataRepository rep = new DummyDataRepository();
+            // To get all users
             List<User> users = rep.getUsers();
+            //fetch the user who match to the given token
             for (User user : users) {
                 if(user.getKey().equals(auth)){
                     existkey=true;
                 }
             }
+            //In case of user does not exist, send error message
             if (!existkey){
                 ((HttpServletResponse) servletResponse).sendError(403, "Forbidden");
                 return;

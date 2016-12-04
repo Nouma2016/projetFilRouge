@@ -7,11 +7,13 @@ import fr.ecp.sio.filrougeapi.model.User;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * A DataRepository that returns fake data.
  */
 public class DummyDataRepository implements DataRepository {
+    private static List<User> users =new ArrayList<User>();
     @Override
     public Station getStation(long id) {
         if (id == 25) {
@@ -98,6 +100,11 @@ public class DummyDataRepository implements DataRepository {
 
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     @Override
     public User getUser(long id) {
         if (id == 1) {
@@ -111,7 +118,7 @@ public class DummyDataRepository implements DataRepository {
             User user = new User();
             user.setId(2);
             user.setLogin("abderrahman");
-            user.setPassWord("klach");
+            user.setPassWord("nouma");
             user.setKey("12345");
             return user;
         } else if (id == 3) {
@@ -126,8 +133,37 @@ public class DummyDataRepository implements DataRepository {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public List<User> getUsers() {
-        return  Arrays.asList(getUser(1), getUser(2), getUser(3));
+
+              users=  Arrays.asList(getUser(1), getUser(2), getUser(3));
+              return users;
+    }
+    // Create a new user and add it to the list of users
+
+    /**
+     *
+     * @param login
+     * @param passWord
+     * @return
+     */
+    @Override
+    public String addUser( String login, String passWord){
+        //Generate key
+        String key = "1234";
+        //Create user
+        User userCreate=new User();
+        userCreate.setId(users.size()+1);
+        userCreate.setLogin(login);
+        userCreate.setPassWord(passWord);
+        userCreate.setKey(key);
+        //Add user to users list
+        users = new ArrayList<User>(users);
+        users.add(userCreate);
+        return key;
     }
 }

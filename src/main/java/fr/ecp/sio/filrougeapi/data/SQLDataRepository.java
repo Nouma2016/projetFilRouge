@@ -72,7 +72,8 @@ public class SQLDataRepository implements DataRepository {
             Connection c = openConnection();
             // Prepare a statement, with '?' placeholders.
             // Prepared statements are efficiently cached and allow a safe handling of placeholders.
-            PreparedStatement stmt = c.prepareStatement("SELECT *, location.latitude as latitude , location.longitude as longitude, location.altitude as altitude  FROM station INNER JOIN location ON station.location = location.id WHERE  station.id = ? ");
+            // The query  returns the ID, name, location, availableBikes and availableBikeStands by using the join between the tables stations and location.
+            PreparedStatement stmt = c.prepareStatement("SELECT *, location.latitude as latitude , location.longitude as longitude, location.altitude as altitude  FROM stations INNER JOIN location ON stations.location = location.id WHERE  stations.id = ? ");
         ) {
             // Provide values for placeholders (indexes start at 1 is SQL!)
             stmt.setLong(1, id);
@@ -88,26 +89,41 @@ public class SQLDataRepository implements DataRepository {
         }
     }
 
+    /**
+     *
+     * @param search
+     * @param limit
+     * @param offset
+     * @return
+     * @throws IOException
+     */
     @Override
     public List<Station> getStations(String search, int limit, int offset) throws IOException {
-
-            String sqlReq="SELECT *, location.latitude as latitude , location.longitude as longitude, location.altitude as altitude  FROM station INNER JOIN location ON station.location = location.id ";
+        // Prepare a query that returns the ID, name, location, availableBikes and availableBikeStands by using the join between the tables stations and location.
+            String sqlReq="SELECT *, location.latitude as latitude , location.longitude as longitude, location.altitude as altitude  FROM stations INNER JOIN location ON stations.location = location.id ";
         try {
                 if(search != null && search != "" && limit == -1)
                 {
-                      sqlReq += " WHERE UPPER(name) LIKE ? LIMIT ?,18446744073709551610 ";
+                    // In case of limit does not exist (null or empty) limit takes the infinite value (18446744073709551610), "Where" is added to the query with search and offset parameters
+                    // search is not case sensitive
+                    sqlReq += " WHERE UPPER(name) LIKE ? LIMIT ?,18446744073709551610 ";
                 }else if(search != null && search != "" ){
+                    //"Where" is added to the query with search, offset and limit parameters
                      sqlReq += " WHERE UPPER(name) LIKE ? LIMIT ?,?";
                 }else if ( limit == -1){
-                     sqlReq += " LIMIT ?,18446744073709551610 ";
+                    // In case of search and limit are null or empty, "Where" is added to query with the offset parameter only
+                     sqlReq += " LIMIT ?,18446744073709551610";
                 }else{
+                    // In case of search is null or empty, "Where" is added to query with the offset and limit parameter
                      sqlReq += " LIMIT ?,?";
                 }
 
                 Connection c = openConnection();
                 PreparedStatement stmt = c.prepareStatement(sqlReq);
+            // Provide values for placeholders (indexes start at 1 is SQL!) according to the cases treated above
                 if( search != null && search != "" && limit == -1)
                 {
+                    //Search the full name or a part of it
                     stmt.setString(1, "%" + search.toUpperCase() + "%");
                     stmt.setInt(2, offset);
                 }else if(search != null && search != "" ){
@@ -174,4 +190,10 @@ public class SQLDataRepository implements DataRepository {
             throw new IOException("Database error", e);
         }
     }
+
+    @Override
+    public  String addUser( String login, String passWord)
+    {
+        return "";
+    };
 }

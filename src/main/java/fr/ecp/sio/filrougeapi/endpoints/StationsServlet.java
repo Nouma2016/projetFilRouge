@@ -27,38 +27,49 @@ public class StationsServlet extends ApiServlet {
         try {
             boolean emptyLimit=false;
             try {
+                // We get the limit value from the path of the URL of the request. If limit is not indicated in the URL, it takes the "-1" value
                 limit = Integer.parseInt(req.getParameter("limit"));
             } catch (NumberFormatException e) {
                 emptyLimit=true;
                 limit=-1;
             }
             try {
+                // We get the offset value from the path of the URL of the request. If offset is not indicated in the URL, it takes the "0" value
                 offset = Integer.parseInt(req.getParameter("offset"));
             } catch (NumberFormatException e) {
                 offset=0;
             }
             if (offset<0)
             {
-                resp.sendError(400, "offset doit etre superieur ou egal à 0");
+//              // In case of offset value < 0, send error message
+                resp.sendError(400, "offset must be superior or equal to 0");
                 return;
             }
-                if(limit <= -1 && !emptyLimit)
+            if(limit < 0 && !emptyLimit)
             {
-                resp.sendError(400, "la limite doit etre superier  ou egal à 1  ");
+                // In case of limit exists and not empty,  and limit<0, send error message
+                resp.sendError(400, "limit must be superior or equal to 0 ");
                 return;
 
             }
 
             search=req.getParameter("search");
             DataRepository repos = DataUtils.getRepository();
+           /*Get list of stations which match with the research criteria:
+            search=name of the station(full or part of name)
+            limit=number of stations to be visualized
+            offset=Index of the first element of the stations list to be visualized*/
             List<Station> stations = repos.getStations(search,limit,offset);
+            //In case of stations list is empty
             if (stations.size() == 0) {
-                // A stations was not found , send a 404 error.
+                // No station was found , send a 404 error.
                 resp.sendError(404, "No station was found");
                 return;
             }
+            //Create a new object listStations which returns, in addition to the list of stations,
+            // the accumulated statistics of number of bikes and available bike'stands
             listStations list=new listStations(stations);
-
+            //Define response format=JSON
             resp.setContentType("application/json");
             sendResponse(list, resp);
             return;

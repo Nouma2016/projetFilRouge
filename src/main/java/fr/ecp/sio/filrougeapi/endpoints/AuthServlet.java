@@ -38,22 +38,24 @@ public class AuthServlet extends ApiServlet {
                     resp.sendError(401, "Unauthorized");
                     return;
                 }
-                //DummyDataRepository is used to create users
+                //DummyDataRepository is used to create users because we don't use database for users
                 DataRepository repos = new DummyDataRepository();
-                List<User> users = repos.getUsers();
-                for(User user:users)
+                List<User> allUsers = repos.getUsers();
+                resp.setContentType("application/json");
+                for(User user:allUsers)
                 {
                     //To check inserted login/password
                     if(user.getLogin().equals(login) && user.getPassWord().equals(passWord)){
-                        resp.setContentType("application/json");
+
                         // In case of login/password matching, key is sent
                         sendResponse(user.getKey(), resp);
                         return;
                     }
 
                 }
-                //In case of login/password non-matching, error is sent
-                resp.sendError(403, "User does not exist");
+                // Create a new user and send the key
+                String key = repos.addUser(login, passWord);
+                sendResponse(key, resp);
                 return;
 
         } catch (NumberFormatException ex) {

@@ -33,5 +33,9 @@ public interface DataRepository {
             Get a list of all users.
          */
     List<User> getUsers() throws IOException;
+    /*
+            add new user to list of all users.
+         */
+    String addUser( String login, String passWord) throws IOException;
 
 }
